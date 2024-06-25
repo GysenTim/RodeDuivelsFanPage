@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Merchandise{% endblock %}
+
+{% block body %}
+    <h1>{{ merch.name }}</h1>
+    <p>{{ merch.description }}</p>
+    <p>Prijs: €{{ merch.price }}</p>
+{% endblock %}

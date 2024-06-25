@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+    
+{% block title %}Homepage{% endblock %}
+    
+{% block body %}
+Er zijn {{ alleMerch|length }} merch items in de database. Bijvoorbeeld:
+<table>
+    <tr>
+        <th>Naam</th>
+        <td>
+            <a href="{{ path('app_merch_show', { id: myMerch.id}) }}">{{ myMerch.name }}</a>
+            </td>
+    </tr>
+    <tr>
+        <th>Prijs</th>
+        <td>{{ myMerch.price }}</td>
+    </tr>
+    <tr>
+        <th> Beschrijving</th>
+        <td>{{ myMerch.description }}</td>
+    </tr>
+</table>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\MerchRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -9,16 +10,15 @@ use Symfony\Component\Routing\Attribute\Route;
 class MyController extends AbstractController
 {
     #[Route(path: '/', name: 'homepage')]
-    public function homepage()
+    public function homepage(MerchRepository $merchRepository): Response
     {
-        return new Response('<strong>What a great page!</strong>');
-    }
+        $alleMerch = $merchRepository->findAll();
 
-    #[Route('/my', name: 'app_my')]
-    public function index(): Response
-    {
-        return $this->render('my/index.html.twig', [
-            'controller_name' => 'MyController',
+        $myMerch = $alleMerch[array_rand($alleMerch)];
+
+        return $this->render('my/homepage.html.twig', [
+            'alleMerch' => $alleMerch,
+            'myMerch' => $myMerch,
         ]);
     }
 }
