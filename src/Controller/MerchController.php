@@ -75,7 +75,7 @@ class MerchController extends AbstractController
                 $this->em->persist($user);
                 $this->em->flush();
 
-                return $this->redirectToRoute('confirmation');
+                return $this->redirectToRoute('app_confirmation');
             }
         }
 
