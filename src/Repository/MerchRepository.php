@@ -19,7 +19,7 @@ class MerchRepository
             new MerchItem(
                 1,
                 'T-shirt',
-                'Leuke t-shirt',
+                'Ideaal voor de Belgische "zomer"',
                 100,
                 12,
                 'images/tshirt.png'
@@ -27,7 +27,7 @@ class MerchRepository
             new MerchItem(
                 2,
                 'Trui',
-                'Lelijke trui',
+                'Ziet er uit als een goede trui om thuis te blijven',
                 300,
                 154,
                 'images/trui.png'

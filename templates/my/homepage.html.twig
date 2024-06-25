@@ -3,26 +3,22 @@
 {% block title %}Homepage{% endblock %}
     
 {% block body %}
-<h1 class="text-4xl">Welkom op de homepage</h1>
-Er zijn {{ alleMerch|length }} merch items in de database. Bijvoorbeeld:
-<table>
-    <tr>
-        <th>Naam</th>
-        <td>{{user.id}}</td>
-    </tr>
-    <tr>
-        <th>Naam</th>
-        <td>
-            <a href="{{ path('app_merch_show', { id: myMerch.id}) }}">{{ myMerch.name }}</a>
-            </td>
-    </tr>
-    <tr>
-        <th>Prijs</th>
-        <td>{{ myMerch.price }}</td>
-    </tr>
-    <tr>
-        <th> Beschrijving</th>
-        <td>{{ myMerch.description }}</td>
-    </tr>
-</table>
+
+<div class="flex justify-center items-center h-screen">
+    {{form_start(form)}} 
+    <div class="flex flex-col space-y-4">
+        <div class="flex flex-col space-y-2">
+            <p class="text-xl">geboortedatum</p>
+            
+            {{ form_widget(form.dob, {'attr': {'class': 'border-2 border-gray-300 text-black rounded-md p-2'}}) }}
+        </div>
+        <div class="flex flex-col space-y-2">
+            <p class="text-xl">rugnummer</p>
+            {{ form_widget(form.userNR, {'attr': {'class': 'border-2 border-gray-300 text-black rounded-md p-2'}}) }}
+        </div>
+        <div class="flex flex-col space-y-2">
+            {{ form_widget(form.Submit, {'attr': {'class': 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'}}) }}
+        </div>
+    </div>
+    {{form_end(form)}}
 {% endblock %}

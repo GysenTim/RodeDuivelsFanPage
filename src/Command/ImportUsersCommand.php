@@ -2,9 +2,8 @@
 
 namespace App\Command;
 
-use App\Repository\UserRepository;
 use App\Entity\User;
-use DateTimeInterface;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -19,12 +18,14 @@ class ImportUsersCommand extends Command
 {
     private $userRepository;
     private $em;
-    public function __construct(EntityManagerInterface $em,UserRepository $userRepository)
+
+    public function __construct(EntityManagerInterface $em, UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
         $this->em = $em;
         parent::__construct();
     }
+
     protected function configure(): void
     {
         $this
@@ -36,35 +37,32 @@ class ImportUsersCommand extends Command
     {
         $output->writeln('Importing users...');
         $path = $input->getArgument('path');
-        if(($fp = fopen($path, 'r')) !== false)
-        {
-            while(($row = fgetcsv($fp, 1000, ',')) !== false){
+        if (($fp = fopen($path, 'r')) !== false) {
+            while (($row = fgetcsv($fp, 1000, ',')) !== false) {
                 $user = new User();
                 $date = \DateTime::createFromFormat('d/m/Y', $row[1]);
-                // the first column is the id, we need to parse it to an integer
                 $id = $row[0];
-                if((int) $id == 0){
+                if (0 == (int) $id) {
                     continue;
                 }
-                // make sure the user does not already exist
-                $check = $this->userRepository->findOneBy(['userNR' => (int) $id]);
-                if($check !== null){
-                    $output->writeln('User with id ' . $id . ' already exists, skipping...');
+                $check = $this->userRepository->findOneBy([
+                    'userNR' => (int) $id,
+                    'dob' => $date,
+                ]);
+                if ($check) {
+                    $output->writeln('User with id '.$id.' already exists, skipping...');
                     continue;
                 }
-                $user->setId((int)$row[0]);
+                $user->setId((int) $row[0]);
                 $user->setDob($date);
                 $user->setMerchid(0);
-                $user->setUserNR((int)$row[0]);
-                
+                $user->setUserNR((int) $row[0]);
 
                 $this->em->persist($user);
-
             }
         }
 
         $this->em->flush();
-
 
         return Command::SUCCESS;
     }

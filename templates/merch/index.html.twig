@@ -10,6 +10,8 @@
     </a>
 </div>
 <div class="md:flex justify-center space-x-3 mt-5 px-4 lg:px-8">
+    
+    {% if user.userNR != 0 %}
     {% for item in merch %}
     <div class="flex justify-center">
         <img class="max-h-[300px] md:max-h-[500px]" src="{{ asset(item.image) }}" alt="trui">
@@ -34,5 +36,21 @@
         </div>
     </div>
     {% endfor %}
+    
+    
 </div>
+{{ form_start(form) }}
+<div class="md:flex justify-between mt-5 px-4 lg:px-8 mx-auto" style="width: 67%;">
+{% for child in form.merchOptions %}
+<div class="flex space-y-2">
+    {{ form_widget(child, {'attr': {'class': 'border-2 border-gray-300 text-black rounded-md p-2'}}) }}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+<div class="flex justify-center mt-10">
+    {{ form_widget(form.Submit, {'attr': {'class': 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'}}) }}
+</div>
+{{ form_end(form) }}
 {% endblock %}
