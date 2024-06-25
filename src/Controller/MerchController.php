@@ -23,4 +23,14 @@ class MerchController extends AbstractController
         ]
         );
     }
+
+    #[Route('/merch', name:'app_merch_index')]
+    public function index(MerchRepository $merchRepository): Response
+    {
+        $merch = $merchRepository->findAll();
+
+        return $this->render('merch/index.html.twig', [
+            'merch' => $merch,
+        ]);
+    }
 }

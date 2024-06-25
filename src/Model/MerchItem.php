@@ -10,6 +10,7 @@ class MerchItem
         private string $description,
         private int $price,
         private int $quantity,
+        private string $image,
     ) {
     }
 
@@ -36,5 +37,10 @@ class MerchItem
     public function getQuantity(): int
     {
         return $this->quantity;
+    }
+
+    public function getImage(): string
+    {
+        return $this->image;
     }
 }

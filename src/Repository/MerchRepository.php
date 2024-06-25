@@ -22,6 +22,7 @@ class MerchRepository
                 'Leuke t-shirt',
                 100,
                 12,
+                'images/tshirt.png'
             ),
             new MerchItem(
                 2,
@@ -29,6 +30,7 @@ class MerchRepository
                 'Lelijke trui',
                 300,
                 154,
+                'images/trui.png'
             ),
             new MerchItem(
                 3,
@@ -36,6 +38,7 @@ class MerchRepository
                 'Om de haarlijn te verbergen',
                 12000,
                 55,
+                'images/pet.jpg'
             ),
         ];
     }
