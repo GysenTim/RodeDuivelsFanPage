@@ -8,6 +8,10 @@ Er zijn {{ alleMerch|length }} merch items in de database. Bijvoorbeeld:
 <table>
     <tr>
         <th>Naam</th>
+        <td>{{user.id}}</td>
+    </tr>
+    <tr>
+        <th>Naam</th>
         <td>
             <a href="{{ path('app_merch_show', { id: myMerch.id}) }}">{{ myMerch.name }}</a>
             </td>

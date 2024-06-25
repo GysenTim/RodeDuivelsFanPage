@@ -24,7 +24,7 @@ class MerchController extends AbstractController
         );
     }
 
-    #[Route('/merch', name:'app_merch_index')]
+    #[Route('/merch', name: 'app_merch_index')]
     public function index(MerchRepository $merchRepository): Response
     {
         $merch = $merchRepository->findAll();
