@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\MerchRepository;
+use App\Repository\ArtikelRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,13 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MerchController extends AbstractController
 {
-    private MerchRepository $merchRepository;
+    private ArtikelRepository $artikelRepository;
     private UserRepository $userRepository;
     private EntityManagerInterface $em;
 
-    public function __construct(MerchRepository $merchRepository, UserRepository $userRepository, EntityManagerInterface $em)
+    public function __construct(ArtikelRepository $artikelRepository, UserRepository $userRepository, EntityManagerInterface $em)
     {
-        $this->merchRepository = $merchRepository;
+        $this->artikelRepository = $artikelRepository;
         $this->userRepository = $userRepository;
         $this->em = $em;
     }
@@ -28,7 +28,7 @@ class MerchController extends AbstractController
     #[Route('/merch/{id<\d+>}', name: 'app_merch_show')]
     public function show(int $id): Response
     {
-        $merch = $this->merchRepository->find($id);
+        $merch = $this->artikelRepository->find($id);
 
         if (!$merch) {
             throw $this->createNotFoundException('Merch item not found');
@@ -43,12 +43,15 @@ class MerchController extends AbstractController
     #[Route('/merch/{id<\d+>}/{day<\d+>}/{month<\d+>}/{year<\d+>}', name: 'app_merch_index')]
     public function index(Request $request, int $id, int $day, int $month, int $year): Response
     {
-        $merch = $this->merchRepository->findAll();
+        $merch = $this->artikelRepository->findAll();
         $dob = \DateTime::createFromFormat('d/m/Y', $day.'/'.$month.'/'.$year);
         $user = $this->userRepository->findOneBy([
             'userNR' => $id,
             'dob' => $dob,
         ]);
+        if (!$user) {
+            return $this->redirectToRoute('homepage');
+        }
         if (0 !== $user->getMerchid()) {
             return $this->redirectToRoute('homepage');
         }
@@ -69,7 +72,7 @@ class MerchController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $selectedMerchID = $form->get('merchOptions')->getData();
-            $selectedMerch = $this->merchRepository->find($selectedMerchID);
+            $selectedMerch = $this->artikelRepository->find($selectedMerchID);
             if (null !== $selectedMerch) {
                 $user->setMerchid($selectedMerchID);
                 $this->em->persist($user);

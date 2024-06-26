@@ -37,32 +37,41 @@ class ImportUsersCommand extends Command
     {
         $output->writeln('Importing users...');
         $path = $input->getArgument('path');
-        if (($fp = fopen($path, 'r')) !== false) {
-            while (($row = fgetcsv($fp, 1000, ',')) !== false) {
-                $user = new User();
-                $date = \DateTime::createFromFormat('d/m/Y', $row[1]);
-                $id = $row[0];
-                if (0 == (int) $id) {
-                    continue;
-                }
-                $check = $this->userRepository->findOneBy([
-                    'userNR' => (int) $id,
-                    'dob' => $date,
-                ]);
-                if ($check) {
-                    $output->writeln('User with id '.$id.' already exists, skipping...');
-                    continue;
-                }
-                $user->setId((int) $row[0]);
-                $user->setDob($date);
-                $user->setMerchid(0);
-                $user->setUserNR((int) $row[0]);
 
-                $this->em->persist($user);
+        if (!file_exists($path) || !is_readable($path)) {
+            $output->writeln('file not found or not readable');
+
+            return Command::FAILURE;
+        }
+
+        $data = array_map('str_getcsv', file($path));
+        $header = array_shift($data);
+
+        foreach ($data as $row) {
+            $userData = array_combine($header, $row);
+
+            $user = new User();
+            $date = \DateTime::createFromFormat('d/m/Y', $userData['dob']);
+            $user->setDob($date);
+            $user->setMerchid(0);
+            $user->setUserNR((int) $userData['id']);
+
+            $check = $this->userRepository->findOneBy([
+                'userNR' => (int) $userData['id'],
+                'dob' => $date,
+            ]);
+            if ($check) {
+                $output->writeln('User with id '.$userData['id'].' already exists, skipping...');
+                continue;
             }
+
+            $this->em->persist($user);
         }
 
         $this->em->flush();
+
+        $output->writeln('Users imported successfully!');
+        $output->writeln('');
 
         return Command::SUCCESS;
     }
